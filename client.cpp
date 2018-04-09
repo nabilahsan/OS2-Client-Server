@@ -1,25 +1,8 @@
-//Md Nabil Ahsan
-//ID: 1508388
-//Programming Assignment 2: Socket Porgramming
-
-//Input file consists of major names that contain spaces
-//e.g. Cognitive Science
-//After which there is a tab to separate the names from the salaries.
-//Both salaries are sepated by tabs.
-//Cognitive Science [tab] 54000 [tab] 121900.
-
-//Input CAN be read char by char, where it reads
-//in the spaces and stops reading when it enconters a tab.
-//Then the early career and mid-career pay are read
-//char by char as well and stored as strings, NOT int.
-
-/*********************************************/
-
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
+#include <strings.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -37,10 +20,9 @@ void error(char *msg)
 
 int main()
 {
-    int portNumber;
-    int sockfd;
+    int portNumber, sockfd, n;
     bool isExit = false;
-    int buffsize = 1024;
+    int buffsize = 256;
     char buffer[buffsize];
     string hostname;
 
@@ -80,11 +62,13 @@ returnToPort:
       }
 
       cout << "Socket created." << endl;
+      bzero((char *) &serv_addr, sizeof(serv_addr));
       serv_addr.sin_family = AF_INET;
+      bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
       serv_addr.sin_port = htons(portNumber);
 
       if (connect(sockfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) == 0){
-          cout << "Connection to port number on server: ";
+          cout << "Connection to port number on server... " << endl;
     }
 
     while (sockfd > 0) {
@@ -92,14 +76,28 @@ returnToPort:
       cout << "Enter desired major: ";
       cin >> buffer;
 
+      bzero(buffer,256);
+      fgets(buffer,255,stdin);
+      if (n < 0){
+        cout << "ERROR writing to socket" << endl;
+      }
+
+      bzero(buffer,256);
+      if (n < 0){
+        cout << "ERROR reading from socket" << endl;
+      }
       send(sockfd, buffer, buffsize, 0);
       recv(sockfd, buffer, buffsize, 0);
 
       cout << "The early career pay = " << buffer << " and mid career pay = " << buffer << endl;
     }
 
-    cout << " Terminating..." << endl;
-    close(sockfd);
+    if (buffer == " ") {
+      /* code */
+      cout << " Terminating..." << endl;
+      close(sockfd);
+
+    }
 
     return 0;
 }
