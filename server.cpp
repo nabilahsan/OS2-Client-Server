@@ -2,7 +2,7 @@
    The port nu1mber is passed as an argument */
 
 #include <iostream>
-#include <string.h>
+#include <strings.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -30,9 +30,9 @@ using namespace std;
 
 int main()
 {
-     int sockfd, newsockfd, portNumber;
+     int sockfd, newsockfd, portNumber, n;
      bool doExit = false;
-     int buffsize = 1024;
+     int buffsize = 256;
      char buffer[buffsize];
 
      paymentInfo p;
@@ -79,6 +79,7 @@ int main()
        cout << "ERROR opening socket" << endl;
        exit(1);
      }
+     bzero((char *) &serv_addr, sizeof(serv_addr));
      cout << "Socket created" << endl;
 
      serv_addr.sin_family = AF_INET;
@@ -91,14 +92,13 @@ int main()
 
 returnToListen:
      //Listens for client trying to connect.
-     listen(sockfd,1);
+     listen(sockfd,5);
 
      //Accepts client with correct port and address.
      newsockfd = accept(sockfd, (struct sockaddr *) &serv_addr, &size);
 
-     if (newsockfd < 0){
-      cout << "Error on accept" << endl;
-     }
+     bzero(buffer,256);
+     n = read(newsockfd,buffer,255);
 
      recv (newsockfd, buffer, buffsize,0);
      string strBuffer(buffer);
