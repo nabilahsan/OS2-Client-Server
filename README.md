@@ -10,6 +10,6 @@ STEPS TO RUN THE PROGRAM:
 7. ./(client executable filename) execute the client file you compiled.
 8. User will be prompted for a hostname. Note: use localhost if running locally on your own machine.
 9. User will be prompted for a Port # to connect to, which must match the Port number you entered for your server.
-10. Once successfully connected, you will be prompted for a username. Client will send the server a message containing your input.
-11. Server will check to see if there is a match and will return the corresponding key, else it will tell you ‘Not found’ if not.
+10. Once successfully connected, you will be prompted for a Major. Client will send the server a message containing your input.
+11. Server will check to see if there is a match and will return the salaries, else it will tell you ‘Not found’ if not.
 12. Client will close and the Server will keep running.
